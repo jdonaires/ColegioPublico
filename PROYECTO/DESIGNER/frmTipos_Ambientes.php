@@ -1,16 +1,16 @@
 <?php
-require_once('../BOL/AMBIENTES.php');
-require_once('../DAO/ambienteDAO.php');
+require_once('../BOL/Tipo_Ambientes.php');
+require_once('../DAO/Tipo_ambientesDAO.php');
 
-$AMBIENTE = new AMBIENTES();
-$ambienteDAO = new ambienteDAO();
+$tipo_amb = new Tipo_Ambientes();
+$tipo_ambDAO = new Tipo_AmbientesDAO();
 
 if(isset($_POST['guardar']))
 {
-$AMBIENTE->__SET('descripcion',          $_POST['descripcion']);
+	$tipo_amb->__SET('descripcion',          $_POST['descripcion']);
 
-	$ambienteDAO->Registrar($AMBIENTE);
-	header('Location: frmAmbiente.php');
+	$tipo_ambDAO->Registrar($tipo_amb);
+	header('Location: frmTipos_Ambientes.php');
 }
 
 
@@ -59,8 +59,8 @@ $AMBIENTE->__SET('descripcion',          $_POST['descripcion']);
 				if(isset($_POST['buscar']))
 				{
 					$resultado = array();//VARIABLE TIPO RESULTADO
-					$AMBIENTE->__SET('DESCRIPCION',          $_POST['descripcion']);//ESTABLECEMOS EL VALOR DEL DNI
-					$resultado = $ambienteDAO->Listar($AMBIENTE); //CARGAMOS LOS REGISTRO EN EL ARRAY RESULTADO
+					$tipo_amb->__SET('DESCRIPCION',          $_POST['descripcion']);//ESTABLECEMOS EL VALOR DEL DNI
+					$resultado = $tipo_ambDAO->Listar($tipo_amb); //CARGAMOS LOS REGISTRO EN EL ARRAY RESULTADO
 					if(!empty($resultado)) //PREGUNTAMOS SI NO ESTA VACIO EL ARRAY
 					{
 						?>

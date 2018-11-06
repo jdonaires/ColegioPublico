@@ -1,8 +1,8 @@
 <?php
 require_once('../DAL/DBAccess.php');
-require_once('../BOL/AMBIENTES.php');
+require_once('../BOL/Tipo_Ambientes.php');
 
-class ambienteDAO
+class Tipo_AmbientesDAO
 {
 	private $pdo;
 
@@ -12,12 +12,12 @@ class ambienteDAO
 			$this->pdo = $dba->get_connection();
 	}
 
-	public function Registrar(AMBIENTES $AMBIENTE)
+	public function Registrar(Tipo_Ambientes $tipo)
 	{
 		try
 		{
 		$statement = $this->pdo->prepare("CALL PROC_INSERTAR_TIPOSAMBIENTES(?)");
-			$statement->bindParam(1,$AMBIENTE->__GET('descripcion'));
+			$statement->bindParam(1,$tipo->__GET('descripcion'));
     $statement -> execute();
 
 		} catch (Exception $e)
@@ -26,24 +26,24 @@ class ambienteDAO
 		}
 	}
 
-	public function Listar(AMBIENTES $AMBIENTE)
+	public function Listar(Tipo_Ambientes $tipo)
 	{
 		try
 		{
 			$result = array();
 
 			$statement = $this->pdo->prepare("call PROC_BUSCAR_TIPOSAMBIENTES(?)");
-			$statement->bindParam(1,$AMBIENTE->__GET('DESCRIPCION'));
+			$statement->bindParam(1,$tipo->__GET('DESCRIPCION'));
 			$statement->execute();
 
 			foreach($statement->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$AMBIENTE = new AMBIENTES();
+				$tipo = new Tipo_Ambientes();
 
-				$AMBIENTE->__SET('COD_TIPOAMBIENTE', $r->COD_TIPOAMBIENTE);
-				$AMBIENTE->__SET('DESCRIPCION', $r->DESCRIPCION);
+				$tipo->__SET('COD_TIPOAMBIENTE', $r->COD_TIPOAMBIENTE);
+				$tipo->__SET('DESCRIPCION', $r->DESCRIPCION);
 
-				$result[] = $AMBIENTE;
+				$result[] = $tipo;
 			}
 
 			return $result;
