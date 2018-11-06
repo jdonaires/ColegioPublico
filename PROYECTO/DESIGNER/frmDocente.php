@@ -46,8 +46,6 @@ if(isset($_POST['guardar']))
 <html lang="es">
 	<head>
 		<title>REGISTRAR DOCENTES</title>
-        <!--<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">-->
-        <link rel = "STYLESHEET" HREF = "../CSS/r_docente.css">
 	</head>
 <body style="padding:15px;text-align:center;">
 
