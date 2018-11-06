@@ -1,0 +1,35 @@
+use bd_colegioprimaria;
+
+DELIMITER $$
+CREATE PROCEDURE Proc_insertar_fases
+(
+	IN	_Cod_tipoFase 			INT(11),
+	IN	_Cod_Escolar 			INT(11),
+	IN	_Fecha_Desde 			DATE,
+	IN	_Fecha_Hasta 			DATE, 
+	IN	_Permitir_Asistencia 	VARCHAR(2), 
+	IN	_Estado 				VARCHAR(20),
+	IN	_Cod_Institucion 		INT(11)
+)
+begin
+	INSERT INTO FASES_ESCOLARES (COD_TIPOFASE, COD_ESCOLAR, FECHA_DESDE, FECHA_HASTA, PERMITIR_ASISTENCIA, ESTADO, COD_INSTITUCION) 
+    VALUES (_Cod_tipoFase,_Cod_Escolar,_Fecha_Desde,_Fecha_Hasta, _Permitir_Asistencia, _Estado, _Cod_Institucion);
+end
+$$
+
+DELIMITER $$
+CREATE PROCEDURE Proc_buscar_fases
+(
+	IN	_Cod_tipoFase 			INT(11)
+)
+begin
+	SELECT FE.COD_FASE, TF.DESCRIPCION, AE.ANIO_ESCOLAR, FE.FECHA_DESDE, FE.FECHA_HASTA, FE.PERMITIR_ASISTENCIA, FE.ESTADO, INS.NOMBRE 
+    FROM FASES_ESCOLARES FE
+	INNER JOIN TIPO_FASE TF ON FE.COD_TIPOFASE = TF.COD_TIPOFASE
+	INNER JOIN ANIO_ESCOLAR AE ON FE.COD_ESCOLAR = AE.COD_ESCOLAR
+	INNER JOIN INSTITUCIONES INS ON FE.COD_INSTITUCION = INS.COD_INSTITUCION
+    WHERE FE.COD_TIPOFASE = _Cod_tipoFase;
+end
+$$
+
+CALL Proc_buscar_fases(1);
