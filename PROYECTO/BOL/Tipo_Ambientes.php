@@ -3,7 +3,7 @@ class Tipo_Ambientes
 {
 	private $cod_Tipoambiente;
 	private $Descripcion;
-	private $Estado;
+	private $Estado
 
 	public function __GET($x)
 	{
