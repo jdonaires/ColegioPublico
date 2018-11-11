@@ -11,7 +11,8 @@ class EstudiantesDAO
 			$dba = new DBAccess();
 			$this->pdo = $dba->get_connection();
 	}
-
+	
+	//Procedimiento registrar
 	public function Registrar(Estudiantes $est)
 	{
 		try
@@ -24,7 +25,7 @@ class EstudiantesDAO
 		$statement->bindParam(5,$est->__GET('Frecuencia_saanee'));
 		$statement->bindParam(6,$est->__GET('Cod_Discapacidad'));
 		$statement->bindParam(7,$est->__GET('Cod_Estudiante'));
-    $statement -> execute();
+    		$statement -> execute();
 
 		} catch (Exception $e)
 		{
@@ -32,6 +33,7 @@ class EstudiantesDAO
 		}
 	}
 
+	//Procedimiento Listar
 
 	public function Listar(Estudiantes $est)
 	{
@@ -70,6 +72,8 @@ class EstudiantesDAO
 			die($e->getMessage());
 		}
 	}
+
+		//Procedimiento mostrar discapacidades
 
 	public function cargarDiscapacidades(){
                  
