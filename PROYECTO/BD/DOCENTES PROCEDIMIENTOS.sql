@@ -1,7 +1,7 @@
 #UTILIZAMOS LA BASE DE DATOS
 USE BD_COLEGIOPRIMARIA;
 
-################################## PROCEDIMIENTO ALMACENADO PARA REGISTRAR PERSONAS ##########################
+# PROCEDIMIENTO ALMACENADO PARA REGISTRAR PERSONAS
 delimiter $$
 Create procedure proc_registrar_personas
 (
@@ -23,11 +23,9 @@ begin
 end
 $$
 
-# call proc_registrar_personas ('CASTRO', 'PALOMINO', 'LUCERO', 'F', 'SOLTERO', '1993-10-06', 'AV. MIRAFLORES #150' ,'345571','LUCERO@GMAIL.COM', 'D009707');
 
 
-
-##################################### FUNCION QUE NOS RETORNA EL ULTIMO REGISTRO INSERTADO DE LA TABLA PERSONAS
+# FUNCION QUE NOS RETORNA EL ULTIMO REGISTRO INSERTADO DE LA TABLA PERSONAS
 DELIMITER $$
 CREATE FUNCTION personas() RETURNS int
 BEGIN
@@ -37,10 +35,8 @@ BEGIN
 END
 $$
 
-# select * from tipo_documento;
-# select * from tipo_documento_personas;
 
-#################################### PROCEDIMIENTO ALMACENADO PARA REGISTRAR TIPO DOCUMENTO Y PERSONAS
+# PROCEDIMIENTO ALMACENADO PARA REGISTRAR TIPO DOCUMENTO Y PERSONAS
 DELIMITER $$
 CREATE PROCEDURE proc_registrar_TDocumento_Personas
 (
@@ -55,11 +51,9 @@ BEGIN
 END
 $$
 
-# Call proc_registrar_TDocumento_Personas(1,'48457484');
 
 
-
-########################################## PROCEDIMIENTO ALMACENADO PARA REGISTRAR DOCENTES
+# PROCEDIMIENTO ALMACENADO PARA REGISTRAR DOCENTES
 delimiter $$
 Create procedure proc_registrar_docentes
 (
@@ -80,9 +74,8 @@ begin
     end
 $$
 
-# call proc_registrar_docentes('DOCENTE POR HORAS','RESPONSABLE DE MATRICULA','1','EDUCACION UNIVERSITARIA','PSICOLOGIA','2017-03-01','2017-12-30');
 
-######################################## PROCEDIMIENTO ALMACENADO PARAREGISTRAR DOCENTES
+# PROCEDIMIENTO ALMACENADO PARAREGISTRAR DOCENTES
 DELIMITER $$
 CREATE PROCEDURE proc_listar_docentes
 (
@@ -98,8 +91,6 @@ begin
     ORDER BY P.COD_PERSONA ASC;
 end
 $$
-
-# CALL proc_listar_docentes();
 
 
 DELIMITER $$
@@ -121,12 +112,8 @@ begin
 end
 $$
 
-CALL proc_buscar_docentes(1,'48457484');
 
-# select * from personas;
-# select * from docentes;
-
-################################################ PROCEDIMIENTO ALMACENADO PARA REGISTRAR ESTUDIANTES
+# PROCEDIMIENTO ALMACENADO PARA REGISTRAR ESTUDIANTES
 
 DELIMITER $$
 CREATE PROCEDURE proc_registrar_estudiantes
@@ -163,7 +150,6 @@ begin
 end
 $$
 
-call proc_listar_estudiantes();
 
 DELIMITER $$
 CREATE PROCEDURE proc_buscar_estudiantes
@@ -184,6 +170,3 @@ begin
     ORDER BY P.COD_PERSONA ASC;
 end
 $$
-
-call proc_buscar_estudiantes(1,'70337847');
-#call proc_buscar_estudiantes(3,'454748545448');
