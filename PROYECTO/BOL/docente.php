@@ -1,20 +1,16 @@
 <?php
-//BOL: Business Object Layer - Capa de objeto de negocio
-
-// CLASE DOCENTE
-class Docente
+class Docentes
 {
-	// CREAMOS LAS VARIABLES (CAMPOS DE LA TABLA DOCENTE)
-	private $Cod_Persona;
-	private $Cargo;
-	private $Funcion;
-	private $Estado;
-	private $Nivel_instruccion;
-	private $Carrera_profesional;
-	private $Fecha_inicio;
-	private $Fecha_fin;
 
-	//OBTIENE Y ESTABLECE LOS DATOS INGRESADOS 
+	private $Cargo;		 		
+	private $Funcion;				
+	private $Estado;				
+	private $Nivel_Instruccion;	
+	private $Carrera_Profesional; 
+	private $Fecha_inicio;	    
+	private $Fecha_Fin;			
+
+
 	public function __GET($x)
 	{ 
 		return $this->$x; 
