@@ -1,39 +1,30 @@
 <?php
-// DAO: Data Access Object - Objeto de Acceso a Datos
-
-//BUSCA LA CARPETA Y LA CLASE PERSONA
 require_once('../DAL/DBAccess.php');
-require_once('../BOL/docente.php');
+require_once('../BOL/Docentes.php');
 
-// ESTA ES LA CLASE DOCENTE
-class DocenteDAO
+class DocentesDAO
 {
-	//VARIABLES
 	private $pdo;
 
-	//SE REALIZA UNA FUNCION PUBLICA PARA EL CONSTRUCTOR
 	public function __CONSTRUCT()
 	{
 			$dba = new DBAccess();
-			$this->pdo = $dba->get_connection(); // OBTIENE LA CONEXION
+			$this->pdo = $dba->get_connection();
 	}
 
-	// ESTA FUNCION REGISTRA A LAS PERSONAS 
-	public function Registrar_doc(Docente $docente)
+	public function Registrar(Docentes $doc)
 	{
 		try
-		{// LLAMA AL PROCEDIMIENTO MEDIANTE LA CONEXION QUE SE HA OBTENIDO EN LA FUNCION CONSTRUCTOR
-		$statement = $this->pdo->prepare("CALL PRO_REGISTRAR_DOCENTE (?,?, ?, ?, ?, ?, ?, ?)");
-		$statement->bindParam(1,$docente->__GET('COD_PERSONA'));
-		$statement->bindParam(2,$docente->__GET('CARGO'));
-		$statement->bindParam(3,$docente->__GET('FUNCION'));
-		$statement->bindParam(4,$docente->__GET('ESTADO'));
-		$statement->bindParam(5,$docente->__GET('NIVEL_INSTRUCCION'));
-		$statement->bindParam(6,$docente->__GET('CARRERA_PROFESIONAL'));
-		$statement->bindParam(7,$docente->__GET('FECHA_INICIO'));
-		$statement->bindParam(8,$docente->__GET('FECHA_FIN'));
-	
-        $statement -> execute();
+		{	
+		$statement = $this->pdo->prepare("CALL proc_registrar_docentes(?,?,?,?,?,?,?)");
+		$statement->bindParam(1,$doc->__GET('Cargo'));
+		$statement->bindParam(2,$doc->__GET('Funcion'));
+		$statement->bindParam(3,$doc->__GET('Estado'));
+		$statement->bindParam(4,$doc->__GET('Nivel_Instruccion'));
+		$statement->bindParam(5,$doc->__GET('Carrera_Profesional'));
+		$statement->bindParam(6,$doc->__GET('Fecha_inicio'));
+		$statement->bindParam(7,$doc->__GET('Fecha_Fin'));
+    $statement -> execute();
 
 		} catch (Exception $e)
 		{
@@ -42,34 +33,31 @@ class DocenteDAO
 	}
 
 
-	public function Listar_doc(Docente $docente)
+	public function Listar(Docentes $doc)
 	{
 		try
-		{	// CREAMOS UNA VARIABLE PARA ALMACENAR EL REGISTRO MEDIANTE UN ARREGLO
+		{
 			$result = array();
 
-			// LLAMA AL PROCEDIMIENTO MEDIANTE LA CONEXION QUE SE HA OBTENIDO EN LA FUNCION CONSTRUCTOR
-			$statement = $this->pdo->prepare("CALL PRO_LISTAR_DOCENTES()");
-
-			//$statement->bindParam(1,$docente->__GET('Cod_Persona'));
+			$statement = $this->pdo->prepare("call proc_buscar_docentes(?,?)");
+			$statement->bindParam(1,$doc->__GET('COD_DOCUMENTO'));
+			$statement->bindParam(2,$doc->__GET('NUMERO_IDENTIDAD'));
 			$statement->execute();
 
 			foreach($statement->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$doc = new Docente();
+				$doc = new Docentes();
 
-				$doc->__SET('DOC.COD_PERSONA',             $r->COD_PERSONA);
-				$doc->__SET('PER.APE_PATERNO',             $r->APE_PATERNO);
-				$doc->__SET('PER.APE_MATERNO',             $r->APE_MATERNO);
-				$doc->__SET('PER.NOMBRES',                 $r->NOMBRES);
-				$doc->__SET('PER.DNI',                     $r->DNI);
-				$doc->__SET('DOC.CARGO',                   $r->CARGO);
-				$doc->__SET('DOC.FUNCION',                 $r->FUNCION);
-				$doc->__SET('DOC.ESTADO',                  $r->ESTADO);
-				$doc->__SET('DOC.NIVEL_INSTRUCCION',       $r->NIVEL_INSTRUCCION);
-				$doc->__SET('DOC.CARRERA_PROFESIONAL',     $r->CARRERA_PROFESIONAL);
-				$doc->__SET('DOC.FECHA_INICIO',            $r->FECHA_INICIO);
-				$doc->__SET('DOC.FECHA_FIN',               $r->FECHA_FIN);
+				$doc->__SET('COD_PERSONA', $r->COD_PERSONA);
+				$doc->__SET('DATOS', $r->DATOS);
+				$doc->__SET('TIPO_DOCUMENTO', $r->TIPO_DOCUMENTO);
+				$doc->__SET('NUMERO_IDENTIDAD', $r->NUMERO_IDENTIDAD);
+				$doc->__SET('CARGO', $r->CARGO);
+				$doc->__SET('FUNCION', $r->FUNCION);
+				$doc->__SET('NIVEL_INSTRUCCION', $r->NIVEL_INSTRUCCION);
+				$doc->__SET('CARRERA_PROFESIONAL', $r->CARRERA_PROFESIONAL);
+				$doc->__SET('FECHA_INICIO', $r->FECHA_INICIO);
+				$doc->__SET('FECHA_FIN', $r->FECHA_FIN);
 
 				$result[] = $doc;
 			}
@@ -82,8 +70,6 @@ class DocenteDAO
 		}
 	}
 
-    
-   
 }
 
 ?>
