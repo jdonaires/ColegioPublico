@@ -1,317 +1,349 @@
 <?php
-//BUSCAMOS LAS CARPETAS DONDE SE ENCUENTRA LA CLASE Y LA CONEXION A LA BD 
-require_once('../BOL/docente.php');
-require_once('../BOL/persona.php');
-require_once('../DAO/docenteDAO.php');
-require_once('../DAO/personaDAO.php');
+require_once('../BOL/Personas.php');
+require_once('../DAO/PersonasDAO.php');
+require_once('../BOL/TD_Personas.php');
+require_once('../DAO/TD_PersonasDAO.php');
+require_once('../BOL/Docentes.php');
+require_once('../DAO/DocentesDAO.php');
 
-// INSTANCIAMOS EL OBJETO DE LAS CLASES Y CREAMOS UN NUEVO OBJETO
-$per = new Persona();
-$perDAO = new PersonaDAO();
+// Personas
+$per = new Personas();
+$perDAO = new PersonasDAO();
 
-$doc = new Docente();
-$docDAO = new DocenteDAO();
+//Cargamos el combobox de los Distritos
+$data_dis=$perDAO->cargarDistritos();
 
-//GUARGAR EL REGISTRO DE LA PERSONA
+//Tipos Documentos Personas
+$tdp = new TD_Personas();
+$tdpDAO = new TD_PersonasDAO();
+
+//Cargamos el combobox de los Tipos_Documentos
+$data_tip=$tdpDAO->cargarTipo_Documentos();
+
+//Docentes
+$doc = new Docentes();
+$docDAO = new DocentesDAO();
+
 if(isset($_POST['guardar']))
 {
-    $per->__SET('APE_PATERNO',           $_POST['APE_PATERNO']);
-    $per->__SET('APE_MATERNO',           $_POST['APE_MATERNO']);
-    $per->__SET('NOMBRES',               $_POST['NOMBRES']);
-    $per->__SET('SEXO',                  $_POST['SEXO']);
-    $per->__SET('DNI',                   $_POST['DNI']);
-    $per->__SET('ESTADO_CIVIL',          $_POST['ESTADO_CIVIL']);
-    $per->__SET('FECHA_NAC',             $_POST['FECHA_NAC']);
-    $per->__SET('DIRECCION',             $_POST['DIRECCION']);
-    $per->__SET('TELEFONO',              $_POST['TELEFONO']);
-    $per->__SET('CORREO',                $_POST['CORREO']);
-    $doc->__SET('COD_PERSONA',           $_POST['COD_PERSONA']);
-    $doc->__SET('CARGO',                 $_POST['CARGO']);
-    $doc->__SET('FUNCION',               $_POST['FUNCION']);
-    $doc->__SET('ESTADO',                $_POST['ESTADO']);
-    $doc->__SET('NIVEL_INSTRUCCION',     $_POST['NIVEL_INSTRUCCION']);
-    $doc->__SET('CARRERA_PROFESIONAL',   $_POST['CARRERA_PROFESIONAL']);
-    $doc->__SET('FECHA_INICIO',          $_POST['FECHA_INICIO']);
-    $doc->__SET('FECHA_FIN',             $_POST['FECHA_FIN']);
+	$per->__SET('Ape_Paterno',          $_POST['ape_pat']);
+	$per->__SET('Ape_Materno',          $_POST['ape_mat']);
+	$per->__SET('Nombres',          	$_POST['nombre']);
+	$per->__SET('Sexo',         		$_POST['sexo']);
+	$per->__SET('Estado_Civil',         $_POST['estado_civil']);
+	$per->__SET('Fecha_Nac',          	$_POST['Fecha_nac']);
+	$per->__SET('Direccion',          	$_POST['direccion']);
+	$per->__SET('Telefono',          	$_POST['telefono']);
+	$per->__SET('Correo',          		$_POST['correo']);
+	$per->__SET('Cod_distrito',         $_POST['id_distrito']);
 
-    $perDAO->Registrar_per($per);
-    $docDAO->Registrar_doc($doc);
-    header('Location: frmDocente.php');
+	$perDAO->Registrar($per);
+
+	$tdp->__SET('Cod_Documento',        $_POST['id_tipodoc']);
+	$tdp->__SET('Numero_Identidad',     $_POST['num_identidad']);
+	
+	$tdpDAO->Registrar($tdp);
+
+
+	$doc->__SET('Cargo',          		$_POST['cargo']);
+	$doc->__SET('Funcion',          	$_POST['funcion']);
+	$doc->__SET('Estado',          		$_POST['estado_civil']);
+	$doc->__SET('Nivel_Instruccion',    $_POST['nivel_instruccion']);
+	$doc->__SET('Carrera_Profesional',  $_POST['carrera']);
+	$doc->__SET('Fecha_inicio',         $_POST['fec_ini']);
+	$doc->__SET('Fecha_Fin',          	$_POST['fec_fin']);
+
+	$docDAO->Registrar($doc);
+	header('Location: frmProceso_Docentes.php');
+
+}
+
+if(isset($_POST['regresar']))
+{
+	header('Location: ../procesos_AsignacionDocente.php');
 }
 
 ?>
-
-<!--FORMULARIO PARA REGISTRAR A LA PERSONA Y AL DOCENTE-->
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>REGISTRAR DOCENTES</title>
+		<title>Proceso de Docentes</title>
+        <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">-->
+        <link rel="stylesheet" type="text/css" href="css/pure-min.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <script>
+	            $(document).ready(function () {
+	                $('#fecha1').datepicker({
+	                    format: "yyyy/mm/dd"
+	                });  
+	            });
+	    </script>
+
+	    <script>
+	            $(document).ready(function () {
+	                $('#fecha2').datepicker({
+	                    format: "yyyy/mm/dd"
+	                });  
+	            });
+	    </script>
+
+	    <script>
+	            $(document).ready(function () {
+	                $('#fecha3').datepicker({
+	                    format: "yyyy/mm/dd"
+	                });  
+	            });
+	    </script>
 	</head>
-<body style="padding:15px;text-align:center;">
+    <body style="padding:15px;">
 
-    <!--TITULO DEL FORMULARIO-->
-    <h3 style="color: black; text-align:center;">.:REGISTRAR DOCENTE:.</h3>
+        <div class="pure-g">
+            <div class="pure-u-1-12">
 
-    <div class="pure-g">
-        <div class="pure-u-1-12">
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" method="post" class="pure-form pure-form-stacked" style="margin-bottom:30px;">
 
-      	<!--FORMULARIO PARA REGISTRAR AL DOCENTE-->	
-            <form  class="contacto" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" method="post" class="pure-form pure-form-stacked" style="margin-bottom:30px; text-align:center;">
+                    <table style="width:700px;" border="0">
+                    	<!-- esto es un comentario en Html
+						Con respecto a estas lineas se ha implementado para ingresar el codi
+						go del curso
+                    	-->
+                    	
+                        <tr>
+                            <th style="text-align:left;">Ape Paterno:</th>
+                            <td><input type="text" name="ape_pat" value="" style="width:100%;" /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Ape Materno:</th>
+                            <td><input type="text" name="ape_mat" value="" style="width:100%;"  /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Nombres:</th>
+                            <td><input type="text" name="nombre" value="" style="width:100%;"  /></td>
+                        </tr>
 
-              	<!--DENTRO DEL FORNNULARIO CREAMOS UNA TABLA PARA REGISTRAR AL DOCENTE-->
-                <table style="width: 1300px; text-align:center;">
-                        <!--BOTONES - GUARDAR REGISTRO-->
-                    <tr>
-                        <td align="left" class="boton1"  colspan="2">
-                            <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-                            <input type="submit" value="GUARDAR" name="guardar"class="pure-button pure-button-primary">
-                            <input type="submit" value="BUSCAR" name="buscar"class="pure-button pure-button-primary">
-                        </td>
-                    </tr>                   
+                        <tr>
+                            <th style="text-align:left;">Sexo:</th>
+                            <td>
+                            	<input type="radio" name="sexo" value="M"> Masculino
+  						        <input type="radio" name="sexo" value="F"> Femenino
+  							</td>
+                        </tr>
 
-                    	<!--CAMPOS DE LA TABLA PERSONA Y DOCENTE-->
-                    <tr>
-                        <th style="text-align:left; padding:10px;">Ape. Paterno:</th>
-                        <td><input type="text" name="APE_PATERNO" value="" style="width:100%; text-align:center;" /></td>
-                        <th style="text-align:left; padding:10px;">Ape. Materno:</th>
-                        <td><input type="text" name="APE_MATERNO" value="" style="width:100%; text-align:center;" /></td>
-                        <th style="text-align:left; padding:10px;">Nombres:</th>
-                        <td><input type="text" name="NOMBRES" value="" style="width:100%; text-align:center;" /></td>
-                    </tr>
-                    <tr>
-                        <th style="text-align:left; padding:10px;"><label>Sexo:</label></th>
-                        <td>
-                            <select name="SEXO" style=" width:100%; text-align:center;">
-                                <option style="text-align:center;">------</option>
-                                <option style="text-align:center;" value="M">Masculino </option>
-                                <option style="text-align:center;" value="F"> Femenino</option>
-                            </select>
-                        </td>
-                        <th style="text-align:left; padding:10px;">Dni:</th>
-                        <td><input type="text" name="DNI" value="" style="width:100%; background-color: #FDFB94; text-align:center;" /></td>    
-                        <th style="text-align:left; padding:10px;"><label>Estado Civil:</label></th>
-                        <td>
-                            <select name="ESTADO_CIVIL" style=" width:100%; text-align:center;">
-                                <option style="text-align:center;">------</option>
-                                <option style="text-align:center;" value="Soltero">Soltero</option>
-                                <option style="text-align:center;" value="Casado">Casado</option>
-                            </select>                       
-                    </tr>
-                    <tr>
-                        <th style="text-align:left; padding:10px;">Direccion:</th>
-                        <td><input type="text" name="DIRECCION" value="" style="width:100%; text-align:center;" /></td>
-                        <th style="text-align:left; padding:10px;">Telefono:</th>
-                        <td><input type="text" name="TELEFONO" value="" style="width:100%; text-align:center;" /></td>
-                        <th style="text-align:left; padding:10px;">Correo:</th>
-                        <td><input type="text" name="CORREO" value="" style="width:100%; text-align:center;"/></td>                            
-                    </tr>  
-                    <tr>
-                        <th style="text-align:left; padding:10px;">Fecha Nacimiento:</th>
-                        <td><input type="date" name="FECHA_NAC" value="" style="width:100%; text-align:center;" /></td>
-                        <th style="text-align:left; padding:10px;">Codigo: </th>
-                        <td>
-                        <?php
+						<tr>
+                            <th style="text-align:left;">Estado Civil:</th>
+                            <td> 
+                            	<select name="estado_civil" style="width:100%;">
+							  		<option value="Soltero">Soltero</option>
+							  		<option value="Casado">Casado</option>
+							  		<option value="Comprometido">Comprometido</option>
+							  		<option value="Divorciado">Divorciado</option>
+							  		<option value="Viudo">Viudo</option>
+								</select> 
+							</td>
+                        </tr>
 
-                            // Nos conectamos y seleccionamos una base de datos.
-                         $link = mysql_connect("localhost","root","");
-                         mysql_select_db("BD_COLEGIOPRIMARIA2",$link);
-                         // Con estas lineas haremos un a consulta a la base de datos para saber cual es la cantidad de trabajadores que hay.
-                         $result = mysql_query("SELECT COUNT(*) AS CUENTA FROM PERSONAS");
-                         $row=mysql_fetch_array($result);
-                         $resultado= $row['CUENTA'];
-                         $total = $resultado + 1;
+                         <tr>
+                            <th style="text-align:left;">Fecha Nacimiento:</th>
+                            <td><input type="date" id="fecha1" name="Fecha_nac" value="" style="width:100%;" /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Direccion:</th>
+                            <td><input type="text" name="direccion" value="" style="width:100%;"  /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Telefono:</th>
+                            <td><input type="text" name="telefono" value="" style="width:100%;" /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Correo:</th>
+                            <td><input type="text" name="correo" value="" style="width:100%;"  /></td>
+                        </tr>
 
-                        echo    '<input type="number" name="COD_PERSONA" readonly=”readonly” value="'.$total.'" style="width:100%; background-color: #FFFECF; text-align:center;" />';
-                        ?>
+                        <tr>
+                            <th style="text-align:left;">Distrito:</th>
+                            <td>
+                                <select name="id_distrito" style="width:100%;">
+                                            <?php foreach ($data_dis as $row){
+                                                echo 
+                                                    '<option value="'.$row['cod_distrito'].'">'.$row['descripcion'].'</option>';
+                                            } ?>
+                                </select>
+                            </td>
+                        </tr>
 
-                        </td>
-                        <th style="text-align:left; padding:10px;"><label>Cargo:</label></th>
-                        <td>
-                            <select name="CARGO" style=" width:100%; text-align:center;">
-                                <option style="text-align:center;">------</option>
-                                <option style="text-align:center;" value="Matricula">Matricula </option>
-                                <option style="text-align:center;" value="Docente por horas">Docente por horas</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>    
-                        <th style="text-align:left; padding:10px;">Funcion:</th>
-                        <td><input type="text" name="FUNCION" value="" style="width:100%; text-align:center;" /></td>                            
-                        <th style="text-align:left; padding:10px;"><label>Estado:</label> </th>
-                        <td>
-                            <input type="radio" name="ESTADO" value="1" checked="true" /> Activo
-                            <input type="radio" name="ESTADO" value="0" required="" /> Inactivo
-                        </td>     
-                        <th style="text-align:left; padding:10px;">Nivel Instruccion:</th>
-                        <td><input type="text" name="NIVEL_INSTRUCCION" value="" style="width:100%; text-align:center;" /></td>                   
-                    </tr>
-         			<tr>
-                        <th style="text-align:left; padding:10px;">Carrera Profesional:</th>
-                        <td><input type="text" name="CARRERA_PROFESIONAL" value="" style="width:100%; text-align:center;" /></td>                            
-                        <th style="text-align:left; padding:10px;">Fecha Inicio:</th>
-                        <td><input type="date" name="FECHA_INICIO" value="" style="width:100%; text-align:center;" /></td>
-                        <th style="text-align:left; padding:10px; ">Fecha Fin</th>
-                        <td><input type="date" name="FECHA_FIN" value="" style="width:100%; text-align:center;" /></td>                        
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div>
+                        <tr>
+                            <th style="text-align:left;">Documento de Identidad:</th>
+                            <td>
+                                <select name="id_tipodoc" style="width:100%;">
+                                            <?php foreach ($data_tip as $row){
+                                                echo 
+                                                    '<option value="'.$row['Cod_Documento'].'">'.$row['Descripcion'].'</option>';
+                                            } ?>
+                                </select>
+                            </td>
+                        </tr>
 
-
-<!--MUESTRA EL TOTAL DE LOS REGISTROS-->
-<?php
-
-// Nos conectamos y seleccionamos una base de datos.
-$link = mysql_connect("localhost","root","");
-        mysql_select_db("BD_COLEGIOPRIMARIA2",$link);
-// Con estas lineas haremos un a consulta a la base de datos para saber cual es la cantidad de trabajadores que hay.
-       $result = mysql_query("SELECT COUNT(*) AS CUENTA FROM PERSONAS");
-       $row=mysql_fetch_array($result);
-       $resultado= $row['CUENTA'];
-
-       echo   "Total Registro de Docentes: ". '<input type="number" align="left" name="COD_PERSONA" disabled="disabled" value="'.$resultado.'" style="background-color: #F1F2F5; text-align:center;" />';
-?>
-
-
-<!--MUESTRA LOS REGISTRO DEL DOCENTE DE FORMA GENERAL-->
-<?php			
-	$resultado = array();//VARIABLE TIPO RESULTADO
-					//$doc->__SET('Cod_Persona',          $_POST['Cod_Persona']);//ESTABLECEMOS EL VALOR DEL DNI
-					//$doc->__SET('Cod_Persona',          $_POST['Cod_Persona']);//ESTABLECEMOS EL VALOR DEL DNI
-					//$resultado = $perDAO->Listar_per($per); //CARGAMOS LOS REGISTRO EN EL ARRAY RESULTADO
-	$resultado = $docDAO->Listar_doc($doc);
-    if(!empty($resultado)) //PREGUNTAMOS SI NO ESTA VACIO EL ARRAY
-	{//Inicio del if
-?>
-	<table style="width: 100%; background-color: #3374FF; border-collapse: separate;" class="pure-table pure-table-horizontal">
-
-    <h4 style="color: black; text-align:center;">.:REGISTRO DOCENTES:.</h4>
-
-		<thead>
-			<tr>   <!--ESTA MUESTRA LOS CAMPOS EN UNA TABLA-->
-				<th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>COD.</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>A. PATERNO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>A. MATERNO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>NOMBRES</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>DNI</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>CARGO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>FUNCION</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>ESTADO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>N. INSTRUCCION</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>CARRERA PRO.</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>F. INICIO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>F. FIN</th></FONT>
-			</tr>
-		</thead>
-	<?php foreach( $resultado as $r): //RECORREMOS EL ARRAY RESULTADO A TRAVES DE SUS CAMPOS
-	?>
-		<tr>
-			<td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.COD_PERSONA'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.APE_PATERNO'); ?></td></FONT> 
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.APE_MATERNO'); ?></td></FONT>
-		    <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.NOMBRES'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.DNI'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.CARGO'); ?></td> </FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.FUNCION'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.ESTADO'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.NIVEL_INSTRUCCION'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.CARRERA_PROFESIONAL'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.FECHA_INICIO'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.FECHA_FIN'); ?></td></FONT>                 
-		</tr>
+                         <tr>
+                            <th style="text-align:left;">Numero de Identidad:</th>
+                            <td><input type="text" name="num_identidad" value="" style="width:100%;" /></td>
+                        </tr>
 
 
 
-	<?php endforeach;
-	} //fin del if
-	else{
-    	echo '<br></br>!NO SE ENCUETRA REGISTRADO EN LA BASE DE DATOS!';
-	}
-    ?>
+						<tr>
+                            <th style="text-align:left;">Cargo:</th>
+                            <td> 
+                            	<select name="cargo" style="width:100%;">
+							  		<option value="NO DETERMINADO">NO DETERMINADO</option>
+							  		<option value="DIRECTOR">DIRECTOR</option>
+							  		<option value="DOCENTE DE AULA">DOCENTE DE AULA</option>
+							  		<option value="DOCENTE POR HORAS">DOCENTE POR HORAS</option>
+							  		<option value="DOCENTE POR HORAS CONTRATADO">DOCENTE POR HORAS CONTRATADO</option>
+							  		<option value="AUXILIAR DE EDUCACION">AUXILIAR DE EDUCACION</option>
+							  		<option value="AUXILIAR DE BIBLIOTECA">AUXILIAR DE BIBLIOTECA</option>
+							  		<option value="DOCENTE DE AULA CONTRATADO">DOCENTE DE AULA CONTRATADO</option>
+							  		<option value="COORDINADOR">COORDINADOR</option>
+							  		<option value="REGISTRADOR">REGISTRADOR</option>
+							  		<option value="DUBDIRECTOR">DUBDIRECTOR</option>
+							  		<option value="PROMOTOR">PROMOTOR</option>
+							  		<option value="OTROS">OTROS</option>
+								</select> 
+							</td>
+                        </tr>
+
+						<tr>
+                            <th style="text-align:left;">Función:</th>
+                            <td> 
+                            	<select name="funcion" style="width:100%;">
+							  		<option value="SIN FUNCION ESPECIAL">SIN FUNCION ESPECIAL</option>
+							  		<option value="RESPONSABLE DE MATRICULA">RESPONSABLE DE MATRICULA</option>
+								</select> 
+							</td>
+                        </tr>
+
+                        <tr>
+                            <!-- <th style="text-align:left;">Estado:</th> -->
+                            <td><input type="text" hidden="" name="estado" value="1" style="width:100%;" /></td>
+                        </tr>
 
 
+						<tr>
+                            <th style="text-align:left;">Nivel Instruccion:</th>
+                            <td> 
+                            	<select name="nivel_instruccion" style="width:100%;">
+							  		<option value="NINGUNO">NINGUNO</option>
+							  		<option value="PRIMARIA INCOMPLETA">PRIMARIA INCOMPLETA</option>
+							  		<option value="PRIMARIA COMPLETA">PRIMARIA COMPLETA</option>
+							  		<option value="SECUNDARIA INCOMPLETA">SECUNDARIA INCOMPLETA</option>
+							  		<option value="SECUNDARIA COMPLETA">SECUNDARIA COMPLETA</option>
+							  		<option value="SUPERIOR NO UNIV. INCOMPLETA">SUPERIOR NO UNIV. INCOMPLETA</option>
+							  		<option value="SUPERIOR NO UNIV. COMPLETA">SUPERIOR NO UNIV. COMPLETA</option>
+							  		<option value="SUPERIOR UNIV. INCOMPLETA">SUPERIOR UNIV. INCOMPLETA</option>
+							  		<option value="SUPERIOR UNIV. COMPLETA">SUPERIOR UNIV. COMPLETA</option>
+							  		<option value="SUPERIOR POST GRADUADO">SUPERIOR POST GRADUADO</option>
+								</select> 
+							</td>
+                        </tr>
 
- <!--ESTA CONDICION SIRVE PARA REALIZAR BUSQUEDA POR DNI-->
 
-                <?php
-                if(isset($_POST['buscar']))
-                {
-                    $resultado = array();//VARIABLE TIPO RESULTADO
-                    $per->__SET('DNI',          $_POST['DNI']);//ESTABLECEMOS EL VALOR DEL DNI
-                    $resultado = $perDAO->Buscar_per($per); //CARGAMOS LOS REGISTRO EN EL ARRAY RESULTADO
-                    if(!empty($resultado)) //PREGUNTAMOS SI NO ESTA VACIO EL ARRAY
-                    {
-                        ?>
-                        <table class="pure-table pure-table-horizontal">
-    <h4 style="color: black; text-align:center;">.:DOCENTE:.</h4>
-                                <thead>
-                                        <tr>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>COD.</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>DNI</th></FONT>                
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>A. PATERNO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>A. MATERNO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>NOMBRES</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>CARGO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>FUNCION</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>ESTADO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>N. INSTRUCCION</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>CARRERA PRO.</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>F. INICIO</th></FONT>
-                <th style="text-align:center; background-color: #3374FF; color: white;"><FONT SIZE=1>F. FIN</th></FONT>
-                                        </tr>
-                                </thead>
-                        <?php
-                        foreach( $resultado as $r): //RECORREMOS EL ARRAY RESULTADO A TRAVES DE SUS CAMPOS
-                            ?>
-                                <tr>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.COD_PERSONA'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.DNI'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.APE_PATERNO'); ?></td></FONT> 
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.APE_MATERNO'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('PER.NOMBRES'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.CARGO'); ?></td> </FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.FUNCION'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.ESTADO'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.NIVEL_INSTRUCCION'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.CARRERA_PROFESIONAL'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.FECHA_INICIO'); ?></td></FONT>
-            <td style="text-align:center; background-color: #F1F2F5;"><FONT SIZE=2>
-                <?php echo $r->__GET('DOC.FECHA_FIN'); ?></td></FONT>                 
-                                </tr>
-                        <?php endforeach;
-                    }
-                    else
-                    {
-                        echo '!NO SE ENCUETRA REGISTRADO EN LA BASE DE DATOS!';
-                    }
-                    ?>
+                         <tr>
+                            <th style="text-align:left;">Carrera Profesional:</th>
+                            <td><input type="text" name="carrera" value="" style="width:100%;" /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Fecha Inicio:</th>
+                            <td><input type="date" id="fecha2" name="fec_ini" value="" style="width:100%;" /></td>
+                        </tr>
+                         <tr>
+                            <th style="text-align:left;">Fecha Fin:</th>
+                            <td><input type="date" id="fecha3"  name="fec_fin" value="" style="width:100%;" /></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+								<input type="submit" value="GUARDAR" name="guardar"class="pure-button pure-button-primary" style="width:100%;"><br><br>
+								<input type="submit" value="REGRESAR" name="regresar"class="pure-button pure-button-primary" style="width:100%;"><br><br>
+                            </td>
+                        </tr>
+
+                        <tr>
+                        	<td>
+                        		<input type="submit" value="BUSCAR" name="buscar"class="pure-button pure-button-primary" style="width:80%;">
+							</td>
+                            <td>
+                                <select name="id_doc" style="width:100%;">
+                                            <?php foreach ($data_tip as $row){
+                                                echo 
+                                                    '<option value="'.$row['Cod_Documento'].'">'.$row['Descripcion'].'</option>';
+                                            } ?>
+                                </select>
+								
+								<input type="text" name="num_iden" value="" style="width:100%;" />
+
+                            </td>
+
+                        	
+                        </tr>
                     </table>
-                    <?php
-                }
-                ?>
+                </form>
+
+
+            </div>
+        </div>
+
+				<!--ESTA CONDICION SIRVE PARA REALIZAR BUSQUEDA POR DNI-->
+
+				<?php
+				if(isset($_POST['buscar']))
+				{
+					$resultado = array();//VARIABLE TIPO RESULTADO
+					$doc->__SET('COD_DOCUMENTO',          $_POST['id_doc']);//ESTABLECEMOS EL VALOR DEL DNI
+					$doc->__SET('NUMERO_IDENTIDAD',          $_POST['num_iden']);//ESTABLECEMOS EL VALOR DEL DNI
+					$resultado = $docDAO->Listar($doc); //CARGAMOS LOS REGISTRO EN EL ARRAY RESULTADO
+					if(!empty($resultado)) //PREGUNTAMOS SI NO ESTA VACIO EL ARRAY
+					{
+						?>
+						<table class="pure-table pure-table-horizontal">
+								<thead>
+										<tr>
+												<th style="text-align:left;">CODIGO</th>
+												<th style="text-align:left;">DATOS</th>
+												<th style="text-align:left;">TIPO DOCUMENTO</th>
+												<th style="text-align:left;">N° IDENTIDAD</th>
+												<th style="text-align:left;">CARGO</th>
+												<th style="text-align:left;">FUNCION</th>
+												<th style="text-align:left;">NIVEL INSTRUCCION</th>
+												<th style="text-align:left;">CARRERA PROFESIONAL</th>
+												<th style="text-align:left;">FECHA INICIO</th>
+												<th style="text-align:left;">FECHA FIN</th>
+										</tr>
+								</thead>
+						<?php
+						foreach( $resultado as $r): //RECORREMOS EL ARRAY RESULTADO A TRAVES DE SUS CAMPOS
+							?>
+								<tr>
+										<td><?php echo $r->__GET('COD_PERSONA'); ?></td>
+										<td><?php echo $r->__GET('DATOS'); ?></td>
+										<td><?php echo $r->__GET('TIPO_DOCUMENTO'); ?></td>
+										<td><?php echo $r->__GET('NUMERO_IDENTIDAD'); ?></td>
+										<td><?php echo $r->__GET('CARGO'); ?></td>
+										<td><?php echo $r->__GET('FUNCION'); ?></td>
+										<td><?php echo $r->__GET('NIVEL_INSTRUCCION'); ?></td>
+										<td><?php echo $r->__GET('CARRERA_PROFESIONAL'); ?></td>
+										<td><?php echo $r->__GET('FECHA_INICIO'); ?></td>
+										<td><?php echo $r->__GET('FECHA_FIN'); ?></td>
+								</tr>
+						<?php endforeach;
+					}
+					else
+					{
+						echo 'no se encuentra en la base de datos!';
+					}
+					?>
+					</table>
+					<?php
+				}
+				?>
     </body>
 </html>
