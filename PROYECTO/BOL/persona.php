@@ -1,22 +1,19 @@
 <?php
-//BOL: Business Object Layer - Capa de objeto de negocio
-
-// CLASE PERSONA
-class Persona
+class Personas
 {
-	// CREAMOS LAS VARIABLES (CAMPOS DE LA TABLA PERSONA)
-	private $Ape_paterno;
-	private $Ape_materno;
-	private $Nombres;
-	private $Sexo;
-	private $Dni;
-	private $Estado_civil;
-	private $Fecha_nac;
-	private $Direccion;
-	private $Telefono;
-	private $Correo;
 
-    //OBTIENE Y ESTABLECE LOS DATOS INGRESADOS 
+	private $Ape_Paterno; 
+	private $Ape_Materno; 
+	private $Nombres;		
+	private $Sexo;		
+	private $Estado_Civil;
+	private $Fecha_Nac;	
+	private $Direccion;	
+	private $Telefono;	
+	private $Correo;		
+	private $Cod_distrito;
+
+
 	public function __GET($x)
 	{ 
 		return $this->$x; 
