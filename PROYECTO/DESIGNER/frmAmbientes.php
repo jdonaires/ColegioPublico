@@ -11,24 +11,29 @@ $data1=$ambDAO->cargarInstituciones();
 
 if(isset($_POST['guardar']))
 {
-	$amb->__SET('descripcion',         		 $_POST['descripcion']);
-	$amb->__SET('ubicacion',        	 $_POST['ubicacion']);
-	$amb->__SET('aforo', 				 $_POST['aforo']);
-	$amb->__SET('area',         		 $_POST['area']);
-	$amb->__SET('estado',        	 $_POST['estado']);
-	$amb->__SET('cod_tipoambiente', 				 $_POST['id_ambiente']);
-	$amb->__SET('cod_institucion', 				 $_POST['id_institucion']);
+	$amb->__SET('descripcion',         		$_POST['descripcion']);
+	$amb->__SET('ubicacion',        	 	$_POST['ubicacion']);
+	$amb->__SET('aforo', 				 	$_POST['aforo']);
+	$amb->__SET('area',         		 	$_POST['area']);
+	$amb->__SET('estado',        			$_POST['estado']);
+	$amb->__SET('cod_tipoambiente', 		$_POST['id_ambiente']);
+	$amb->__SET('cod_institucion', 			$_POST['id_institucion']);
 
 	$ambDAO->Registrar($amb);
 	header('Location: frmAmbientes.php');
 }
 
+if(isset($_POST['regresar']))
+{
+	header('Location: ../procesos_registroambientes.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>CRUD</title>
-        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+		<title>Ambientes</title>
+        <link rel="stylesheet" type="text/css" href="css/pure-min.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	</head>
     <body style="padding:15px;">
 
@@ -99,6 +104,7 @@ if(isset($_POST['guardar']))
                             <td colspan="2">
 									<input type="submit" value="GUARDAR" name="guardar"class="pure-button pure-button-primary">
 									<input type="submit" value="BUSCAR" name="buscar"class="pure-button pure-button-primary">
+									<input type="submit" value="REGRESAR" name="regresar"class="pure-button pure-button-primary">
                             </td>
                         </tr>
                     </table>

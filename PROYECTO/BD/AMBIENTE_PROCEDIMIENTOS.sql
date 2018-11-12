@@ -2,8 +2,6 @@
 USE BD_COLEGIOPRIMARIA;
 
 
-select * from AMBIENTES;
-
 # PROCEDIMIENTO ALMACENADO PARA CURSOS
 # PROCESO REGISTRO
 
@@ -24,7 +22,7 @@ BEGIN
 END
 $$
 
-CALL Proc_registrar_ambientes(2,'AULA GENERICA DE LA IE 3','TERCER PISO',30,52,'malo',1);
+# CALL Proc_registrar_ambientes(2,'AULA GENERICA DE LA IE 3','TERCER PISO',30,52,'malo',1);
 
 
 # PROCESO BUSCAR
@@ -42,4 +40,4 @@ begin
 end
 $$
 
-call Proc_buscar_ambientes(2);
+select * from ambientes;
