@@ -25,15 +25,19 @@ if(isset($_POST['guardar']))
 	header('Location: frmCurso_grado.php');
 }
 
-
+if(isset($_POST['regresar']))
+{
+	header('Location: ../procesos_grados_secciones_turno.php');
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>CRUD</title>
+		<title>Cursos y Grados</title>
         <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">-->
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" ">
+        <link rel="stylesheet" type="text/css" href="css/pure-min.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	</head>
     <body style="padding:15px;">
 
@@ -138,6 +142,7 @@ if(isset($_POST['guardar']))
                             <td colspan="2">
 								<input type="submit" value="GUARDAR" name="guardar"class="pure-button pure-button-primary">
 								<input type="submit" value="BUSCAR" name="buscar"class="pure-button pure-button-primary">
+								<input type="submit" value="REGRESAR" name="regresar"class="pure-button pure-button-primary">
                             </td>
                         </tr>
                     </table>
