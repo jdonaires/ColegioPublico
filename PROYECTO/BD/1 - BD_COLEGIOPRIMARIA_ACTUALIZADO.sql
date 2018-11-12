@@ -592,10 +592,9 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `bd_colegioprimaria`.`matriculas_cursos` ;
 
 CREATE TABLE IF NOT EXISTS `bd_colegioprimaria`.`matriculas_cursos` (
-  `Cod_Matricula` INT(11) NOT NULL,
+  `Cod_Matricula` INT(11) NULL,
   `Cod_Persona` INT(11) NULL DEFAULT NULL,
   `Cod_Cursos` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`Cod_Matricula`),
   INDEX `R_130` (`Cod_Persona` ASC, `Cod_Cursos` ASC),
   CONSTRAINT `matriculas_cursos_ibfk_1`
     FOREIGN KEY (`Cod_Matricula`)
@@ -606,7 +605,6 @@ CREATE TABLE IF NOT EXISTS `bd_colegioprimaria`.`matriculas_cursos` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
 -- -----------------------------------------------------
 -- Table `bd_colegioprimaria`.`detalles_evaluaciones`
 -- -----------------------------------------------------
@@ -614,9 +612,8 @@ DROP TABLE IF EXISTS `bd_colegioprimaria`.`detalles_evaluaciones` ;
 
 CREATE TABLE IF NOT EXISTS `bd_colegioprimaria`.`detalles_evaluaciones` (
   `calificacion` CHAR(1) NULL DEFAULT NULL,
-  `Cod_Evaluacion` INT(11) NOT NULL,
+  `Cod_Evaluacion` INT(11) NULL,
   `Cod_Matricula` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`Cod_Evaluacion`),
   INDEX `R_129` (`Cod_Matricula` ASC),
   CONSTRAINT `detalles_evaluaciones_ibfk_1`
     FOREIGN KEY (`Cod_Evaluacion`)
