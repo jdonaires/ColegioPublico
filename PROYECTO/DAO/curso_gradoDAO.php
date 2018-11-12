@@ -90,7 +90,7 @@ class CursosGradosDAO
                  
             //Recuerda cambiar el ID     
             $query="select Cod_escolar, modalidad_evaluacion  from anio_escolar
-					where Cod_Institucion = 5;  ";
+					where Cod_Institucion = 1;  ";
                                
             $stmt =$this->pdo->prepare($query);
                 
