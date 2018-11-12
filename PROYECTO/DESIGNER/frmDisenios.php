@@ -81,20 +81,7 @@ if(isset($_POST['guardar']))
 												<th style="text-align:left;">Fecha de Emision</th>
 										</tr>
 								</thead>
-				<?php
-						foreach( $listado as $r): //RECORREMOS EL ARRAY RESULTADO A TRAVES DE SUS CAMPOS
-							?>
-								<tr>
-										<td><?php echo $r['Cod_DisenioC']; ?></td>
-										<td><?php echo $r['Descripcion']; ?></td>
-										<td><?php echo $r['Anio']; ?></td>
-								</tr>
-					<?php endforeach
-					?>
-					</table>
-					<?php
-				}
-				?>
+				
 
     </body>
 </html>
