@@ -18,18 +18,11 @@ class Tipos_IEDAO
         try{
                  
             $query="Select cod_tipoie, descripcion from TIPO_INSTITUCIONES";
-                
-            //Preparamos la Consulta para su ejecucion: 
-                
+                                
             $stmt =$this->pdo->prepare($query);
                 
-            //Ejecutamos la Consulta
             $stmt->execute();
-                
-            //Obtengo el total de filas afectadas por la accion que se realiza
-            //$res=$stmt->rowCount();
-            //$data = $stmt->fetchAll();
-                
+
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
             return $data;
@@ -47,18 +40,11 @@ class Tipos_IEDAO
         try{
                  
             $query="Select cod_departamento, descripcion from Departamentos";
-                
-            //Preparamos la Consulta para su ejecucion: 
-                
+                               
             $stmt =$this->pdo->prepare($query);
-                
-            //Ejecutamos la Consulta
+
             $stmt->execute();
-                
-            //Obtengo el total de filas afectadas por la accion que se realiza
-            //$res=$stmt->rowCount();
-            //$data = $stmt->fetchAll();
-                
+                                
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
             return $data;
@@ -89,35 +75,13 @@ class Tipos_IEDAO
         {
             die($e->getMessage());
         }
-    }
-    /*
-    public function cargarDistritos($d)
-    {
-        try
-        {
-            $sql = "Select dis.Cod_distrito, dis.descripcion, pro.descripcion as provincia from distritos dis inner join provincias pro on dis.cod_provincia = pro.cod_provincia where pro.cod_provincia= :id";
-
-            $stm = $this->pdo->prepare($sql);
-            //solo retirar el comentario para el caso de hacer dinámica los select
-            $stm->execute(array(':id' => $d));
-            
-            $data = $stm->fetchAll(PDO::FETCH_ASSOC);
-
-            return  $data;
-        }
-        catch(Exception $e)
-        {
-            die($e->getMessage());
-        }
-    }
-    */
-   
+    }   
   
     public function cargarDistritos(){
                  
         try{
                  
-            $sql = "select cod_distrito, descripcion from distritos where cod_provincia='PR00901'";
+            $sql = "select cod_distrito, descripcion from distritos where cod_provincia='PR00001'";
                 
             //Preparamos la Consulta para su ejecucion: 
                 

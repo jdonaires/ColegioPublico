@@ -46,57 +46,6 @@ class InstitucionesDAO
 		}
 	}
 
-/*
-	public function Listar()
-	{
-		try
-		{
-			$result = array();
-
-			$statement = $this->pdo->prepare("CALL PROC_LISTAR_INSTITUCIONES()");
-			
-			//$statement->bindParam(1,$instituciones->__GET('cod_modular'));
-			$statement->execute();
-
-			foreach($statement->fetchAll(PDO::FETCH_ASSOC) as $r)
-			{
-				$alm = new Instituciones();
-
-				$alm->__SET('cod_institucion', $r->cod_institucion);
-				$alm->__SET('cod_modular', $r->cod_modular);
-				$alm->__SET('anexo', $r->anexo);
-                $alm->__SET('nivel', $r->nivel);
-                $alm->__SET('nombre', $r->nombre);
-				$alm->__SET('gestion', $r->gestion);
-				$alm->__SET('forma', $r->forma);
-				$alm->__SET('codigo_local', $r->codigo_local);
-				$alm->__SET('dre', $r->dre);
-				$alm->__SET('ugel', $r->ugel);
-				$alm->__SET('resolucion', $r->resolucion);
-				$alm->__SET('emblematica', $r->emblematica);
-				$alm->__SET('direccion', $r->direccion);
-				$alm->__SET('centro_poblado', $r->centro_poblado);
-				$alm->__SET('resolucion_ie', $r->resolucion_ie);
-				$alm->__SET('telefono', $r->telefono);
-				$alm->__SET('pagina_web', $r->pagina_web);
-				$alm->__SET('genero', $r->genero);
-				$alm->__SET('correo', $r->correo);
-				$alm->__SET('tipo_ie', $r->tipo_ie);
-				$alm->__SET('distrito', $r->distrito);
-				$alm->__SET('insignia', $r->insignia);
-
-				$result[] = $alm;
-			}
-
-			return $result;
-		}
-		catch(Exception $e)
-		{
-			die($e->getMessage());
-		}
-	}
-*/
-
 	public function get_instituciones()
     {
         try {

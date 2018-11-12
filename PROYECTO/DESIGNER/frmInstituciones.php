@@ -47,6 +47,12 @@ if(isset($_POST['guardar']))
 
 }
 
+if(isset($_POST['regresar']))
+{
+    header('Location: ../procesos_registroambientes.php');
+}
+
+
 if(isset($_REQUEST['action']))
 {
     switch($_REQUEST['action'])
@@ -62,8 +68,10 @@ if(isset($_REQUEST['action']))
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>CRUD</title>
-         <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+		<title>Mantenimiento de Instituciones Educativas</title>
+        <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css"> -->
+         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+         <link rel="stylesheet" type="text/css" href="css/pure-min.css" />
         <!--<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" ">-->
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -226,6 +234,8 @@ if(isset($_REQUEST['action']))
                                 <input type="submit" value="LISTAR" name="listar"class="pure-button pure-button-primary">
 
                                 <input type="submit" value="BUSCAR" name="buscar"class="pure-button pure-button-primary">
+
+                                <input type="submit" value="REGRESAR" name="regresar"class="pure-button pure-button-primary">
                             </td>
                           
                         </tr>
