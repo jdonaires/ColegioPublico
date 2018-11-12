@@ -1,6 +1,6 @@
 #usamos la base de datos
 
-use bd_colegioprimaria;
+use BD_COLEGIOPRIMARIA;
 
 DELIMITER $$
 CREATE PROCEDURE Proc_insertar_disenio
